@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ user.username }}</h1>
+    {% if current_user.username == user.username %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ form.photo.label }}
+        {{ form.photo }}
+        {{ form.submit() }}
+    </form>
+    {% endif %}
+    {% for task in tasks %}
+        <br>
+        <div style="border: 2px solid black">
+            <h3>{{ task.title }}</h3>
+            <p>{{ task.description }}</p>
+            <p>{{ task.due_date }}</p>
+            <p>{{ task.helpers }}</p>
+        </div>
+    {% endfor %}
+    <!--Include default tab for their tasks, and other tabs for other things-->
+{% endblock %}

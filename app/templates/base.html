@@ -8,13 +8,20 @@
             <nav>
                 <div class="logo"><a href="{{ url_for('index') }}">Home Tasker</a></div>
                 <ul class="nav-links">
-                    <li><a href="">Task Calendar</a></li>
+                    <a href="#">Task Calendar</a>
+                    <a href="#">User List</a>
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('login') }}">Sign In</a></li>
+                    <a href="{{ url_for('login') }}">Sign In</a>
                     {% else %}
-                    <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                    <a href="{{ url_for('logout') }}">Logout</a>
                     {% endif %}
-                </ul>
+                    <div class="dropdown">
+                        <button class="dropbtn">{{ current_user.username }}</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                            <a href="#">Settings</a>
+                        </div>
+                    </div>
             </nav>
         </header>
         <hr>

@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
 
 class Task(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    title: so.Mapped[str] = so.mapped_column(sa.String(40))
+    title: so.Mapped[str] = so.mapped_column(sa.String(45))
     description: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
     due_date: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc)

@@ -8,3 +8,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL"
     ) or "sqlite:///" + os.path.join(basedir, "app.db")
+    UPLOADS_DEFAULT_DEST = "app/uploads"
+    UPLOADED_PHOTOS_DEST = "app/uploads"
+    UPLOADED_PHOTOS_ALLOW = ("png", "jpg", "jpeg", "gif")

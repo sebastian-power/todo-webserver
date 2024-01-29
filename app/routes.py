@@ -1,11 +1,19 @@
+import os
 from urllib.parse import urlsplit
 
 import sqlalchemy as sa
-from flask import flash, redirect, render_template, request, url_for
+from flask import (
+    flash,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    url_for,
+)
 from flask_login import current_user, login_required, login_user, logout_user
 
-from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app import app, db, photos
+from app.forms import LoginForm, ProfilePictureForm, RegistrationForm
 from app.models import User
 
 
@@ -67,3 +75,30 @@ def signup():
         flash("Account has been registered")
         return redirect(url_for("login"))
     return render_template("signup.html", title="Sign Up", form=form)
+
+
+@app.route("/user/<username>", methods=["GET", "POST"])
+@login_required
+def user(username):
+    user = db.first_or_404(sa.select(User).where(User.username == username))
+    tasks = [
+        {"asignee": user, "title": "Take out rubbish and recycling"},
+        {
+            "asignee": user,
+            "title": "Clean room",
+            "description": "Just yours",
+            "helpers": "Miguel",
+        },
+    ]
+    form = ProfilePictureForm()
+    if form.validate_on_submit():
+        filename = photos.save(form.photo.data)
+        flash(f"Photo {filename} uploaded succesfully")
+    return render_template("user.html", user=user, tasks=tasks, form=form)
+
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(
+        "".join(app.config["UPLOADED_PHOTOS_DEST"].split("/")[1:]), filename
+    )
